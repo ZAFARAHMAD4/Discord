@@ -1,0 +1,384 @@
+
+  
+  body {
+    background-color: #f0f4f8;
+  }
+  
+  .app-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .form-container {
+    background-color: #fff;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    width: 100%;
+    margin-top: 10%;
+  }
+  
+  h2 {
+    text-align: center;
+    color: #4e4e4e;
+    margin-bottom: 20px;
+  }
+  
+  input {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    color: #333;
+    /* text-align: center; */
+  }
+  .otp-inputs input{
+    text-align: center;
+  }
+  
+  input:focus {
+    outline: none;
+    border-color: #4e90de;
+  }
+  
+  button {
+    width: 100%;
+    padding: 12px;
+    background-color: #4e90de;
+    border: none;
+    border-radius: 5px;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  button:hover {
+    background-color: #357bbd;
+  }
+  
+  .toggle-form {
+    text-align: center;
+    color: #4e90de;
+    font-size: 14px;
+    margin-top: 15px;
+    cursor: pointer;
+    transition: color 0.3s;
+  }
+  
+  .toggle-form:hover {
+    color: #357bbd;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .form-container {
+      width: 80%;
+      padding: 1.5rem;
+    }
+  
+    h2 {
+      font-size: 1.5rem;
+    }
+  
+    input {
+      font-size: 14px;
+    }
+  
+    button {
+      font-size: 14px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .form-container {
+      width: 90%;
+      padding: 1rem;
+    }
+  
+    h2 {
+      font-size: 1.2rem;
+    }
+  
+    input {
+      font-size: 13px;
+    }
+  
+    button {
+      font-size: 13px;
+    }
+  }
+
+
+  
+  /* Full-page background */
+.fullpage-otp-bg {
+  background-image: url('../images/createaccountuser.jpg'); /* Your image path */
+  background-size: cover;
+  background-position: center;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 20px;
+}
+
+/* Transparent card-like form container */
+.card-form {
+  background-color: rgba(255, 255, 255, 0.9);
+  padding: 40px;
+  border-radius: 16px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+  max-width: 500px;
+  width: 100%;
+}
+
+.card-form h1 {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 10px 15px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+}
+
+/* Button */
+.btn-primary-full {
+  width: 100%;
+  padding: 12px;
+  font-size: 1.1rem;
+  background-color: #0d6efd;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  margin-top: 15px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-primary-full:hover {
+  background-color: #084298;
+}
+
+/* OTP input styles */
+.otp-inputs {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin: 20px 0;
+}
+
+.otp-inputs input {
+  width: 55px;
+  height: 55px;
+  font-size: 1.5rem;
+  text-align: center;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+/* Errors */
+.error-message {
+  color: red;
+  text-align: center;
+  margin-top: 10px;
+}
+
+/* Responsive tweaks */
+@media (max-width: 576px) {
+  .card-form {
+    padding: 25px;
+  }
+
+ 
+}
+
+/* Background image for Admin login */
+.admin-login-bg {
+  background-image: url('../images/adminsss.jpg'); /* Replace with your background image */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Transparent login box styling */
+.transparent-box {
+  background-color: rgba(255, 255, 255, 0.85); /* White with slight transparency */
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  max-width: 400px;
+  width: 100%;
+}
+
+/* Optional enhancements */
+.login-container h1 {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.error-message {
+  color: red;
+  margin-top: 10px;
+  text-align: center;
+}
+
+
+/* Background for the Signup page */
+.signupbg {
+  background-image: url('../images/adminregister.avif'); /* Make sure to update the path to your image */
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  min-height: 100vh;
+  width: 100%;
+  overflow-x: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Make sure the registration form content is centered */
+.registration-container {
+  background-color: rgba(255, 255, 255, 0.9); /* Light translucent background for content */
+  padding: 30px;
+  border-radius: 10px;
+  width: 100%;
+  max-width: 500px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+/* Basic styling for form inputs and buttons */
+.form-group {
+  margin-bottom: 15px;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+select {
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+button {
+  background-color: #007bff;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 100%;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+/* Error message styling */
+.error-message {
+  color: red;
+  font-size: 14px;
+}
+
+/* OTP input styling */
+.otp-inputs {
+  display: flex;
+  justify-content: space-between;
+}
+
+.otp-inputs input {
+  width: 40px;
+  height: 40px;
+  text-align: center;
+  font-size: 18px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.otp-submit {
+  width: 100%;
+  padding: 10px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.otp-submit:hover {
+  background-color: #218838;
+}
+
+/*  password strong */
+.password-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-wrapper input {
+  flex: 1;
+  padding-right: 2.5rem;
+}
+
+.eye-button {
+  position: absolute;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.strength-text {
+  margin-top: 5px;
+  font-weight: bold;
+}
+
+.strength-text.weak {
+  color: red;
+}
+
+.strength-text.medium {
+  color: orange;
+}
+
+.strength-text.strong {
+  color: green;
+}
+
+.eyesbutton{
+  width: 10% !important;
+}
+.eyesbutton:hover{
+  background-color: transparent;
+}
+
+.eyeb {
+  color: black;
+  font-weight: bold;
+}
+
