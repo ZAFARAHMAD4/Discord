@@ -19,7 +19,7 @@ const handleLogin = async (e) => {
   const trimmedPassword = formData.password.trim();
 
   try {
-    const response = await axios.post("http://localhost:4000/api/login ", {
+    const response = await axios.post(`${import.meta.env.VITE_DEV_URL}/api/login`, {
       enrollmentNumber: number,
       password: trimmedPassword,
     });

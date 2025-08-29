@@ -32,7 +32,7 @@ function Signup() {
     }
    console.log(formData.name,'formdata')
     try {
-      const response = await axios.post("http://localhost:4000/api/users/signup", {
+      const response = await axios.post(`${import.meta.env.VITE_DEV_URL}/api/users/signup`, {
         name: formData.name,
         enrollmentNumber: formData.enrollmentNumber.trim(),
         email: formData.email.trim(),

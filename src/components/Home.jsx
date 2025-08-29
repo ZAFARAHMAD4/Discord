@@ -39,7 +39,7 @@ const Home = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await fetch(`http://localhost:4000/api/test2`);
+        const response = await fetch(`${import.meta.env.VITE_DEV_URL}/api/test2`);
         const data = await response.json();
         if (response.ok) {
           const allUsers = data.students || data.studentss || [];
@@ -64,7 +64,7 @@ const Home = () => {
 
   // ---------- socket setup ----------
   useEffect(() => {
-    socket.current = io("http://localhost:4000");
+    socket.current = io(`${import.meta.env.VITE_DEV_URL}`);
 
     socket.current.on("receive_private_message", (data) => {
       setMessages((prev) => [...prev, data]);

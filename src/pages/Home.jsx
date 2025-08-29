@@ -37,7 +37,7 @@ function Home() {
 useEffect(() => {
   const fetchUsers = async () => {
     try {
-      const response = await fetch("http://localhost:4000/api/users"); // ✅ correct API
+      const response = await fetch(`${import.meta.env.VITE_DEV_URL}/api/users`); // ✅ correct API
       const data = await response.json();
       console.log(data, "selectedUser");
 
@@ -228,7 +228,7 @@ useEffect(() => {
 
   // ---------- socket setup ----------
   useEffect(() => {
-    socket.current = io("http://localhost:4000");
+    socket.current = io(`${import.meta.env.VITE_DEV_URL}`);
 
     socket.current.on("receive_private_message", (data) => {
       setMessages((prev) => [...prev, data]);
