@@ -8,7 +8,7 @@ const cors = require("cors");
 // Database aur routes import kiye
 const connectedDB = require("./config/db");
 const users = require("./routers/route");
-const sendMail = require("./Controller/sendMail");
+// const sendMail = require("./Controller/sendMail");
 
 const app = express();
 const server = http.createServer(app);
@@ -141,7 +141,7 @@ connectedDB();
 
 // Routes
 app.use("/api", users);
-app.get("/sendemail", sendMail);
+// app.get("/sendemail", sendMail);
 app.get("/", (req, res) => {
   res.send("hello");
 });
