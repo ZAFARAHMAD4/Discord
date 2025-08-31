@@ -351,25 +351,7 @@ useEffect(() => {
     };
     reader.readAsDataURL(file);
   };
-  // ---------- resize fix for mobile keyboard ----------
-  useEffect(() => {
-    const handleResize = () => {
-      const container = document.querySelector(".chat-container");
-      if (container) {
-        container.style.height = window.innerHeight + "px";
-      }
-    };
-    window.addEventListener("resize", handleResize);
-    handleResize();
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
 
-  // ---------- sidebar resize ----------
-  useEffect(() => {
-    const updateHeight = () => setSidebarHeight(window.innerHeight);
-    window.addEventListener("resize", updateHeight);
-    return () => window.removeEventListener("resize", updateHeight);
-  }, []);
   // ---------- Signaling listeners ----------
   useEffect(() => {
     if (!socket.current) return;
@@ -568,15 +550,15 @@ useEffect(() => {
       </div>
 
       {/* Right Chat Area */}
-      <div className="chat-container flex-1 flex flex-col w-full relative">
+      <div className="flex-1 flex flex-col w-full max-h-screen">
         {selectedUser ? (
           inCall ? (
             callType === "audio" ? (
               <AudioCallScreen
-                remoteAudioRef={remoteAudio}
+                remoteAudioRef={remoteAudio} // ✅ stream is set by pc.ontrack
                 callerName={selectedUser?.name}
-                onEndCall={() => {}}
-                onMute={() => {}}
+                onEndCall={EndCall}
+                onMute={toggleMic}
                 muted={!micOn}
               />
             ) : (
@@ -585,9 +567,9 @@ useEffect(() => {
                 remoteVideo={remoteVideo}
                 micOn={micOn}
                 videoOn={videoOn}
-                toggleMic={() => {}}
-                toggleVideo={() => {}}
-                EndCall={() => {}}
+                toggleMic={toggleMic}
+                toggleVideo={toggleVideo}
+                EndCall={EndCall}
                 selectedName={selectedUser?.name}
               />
             )
@@ -596,25 +578,20 @@ useEffect(() => {
               <ChatHeader
                 selectedUser={selectedUser}
                 onBack={() => setSelectedUser(null)}
-                onCallVideo={() => {}}
-                onCallAudio={() => {}}
+                onCallVideo={CallVideo}
+                onCallAudio={CallAudio}   // ✅ audio call button
                 showActions={showActions}
                 setShowActions={setShowActions}
-                className="chat-header"
               />
 
-              <MessageList
-                messages={messages}
-                currentUser={currentUser}
-                className="message-list"
-              />
+              <MessageList messages={messages} currentUser={currentUser} />
 
               <MessageInput
                 message={message}
                 setMessage={setMessage}
                 onSend={handleSend}
                 onFileSend={handleFileSend}
-                className="message-input"
+                onVoiceSend={(file) => handleSend(null, file)} // voice file bhi bhejna
               />
             </>
           )
@@ -622,9 +599,15 @@ useEffect(() => {
           <main className="container">
             <p>Hello 👋 I'm</p>
             <section className="animation">
-              <div className="first"><div>ZAFAR AHMAD</div></div>
-              <div className="second"><div>Web Developer</div></div>
-              <div className="third"><div>Software Engineer</div></div>
+              <div className="first">
+                <div>ZAFAR AHMAD</div>
+              </div>
+              <div className="second">
+                <div>Web Developer</div>
+              </div>
+              <div className="third">
+                <div>Software Engineer</div>
+              </div>
             </section>
           </main>
         )}
