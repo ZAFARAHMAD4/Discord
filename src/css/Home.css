@@ -3,6 +3,10 @@
 .menu{
       overflow-y: hidden;
 }
+html ,body{
+  overflow-y: hidden;
+  overflow-x: hidden;
+}
 .bgg {
   background-image: url('../assets/images/giphy.gif');
   background-repeat: no-repeat;

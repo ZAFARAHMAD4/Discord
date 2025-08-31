@@ -1,6 +1,7 @@
 import React from "react";
 import { FiPhone, FiVideo, FiMic, FiMoreHorizontal } from "react-icons/fi";
 import { IoIosArrowBack } from "react-icons/io";
+import '../css/ChatHeader.css'
 
 function ChatHeader({ selectedUser, onBack, onCallVideo, showActions, onCallAudio,setShowActions }) {
   return (

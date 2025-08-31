@@ -1,5 +1,5 @@
 import React from "react";
-
+import '../css/MessageList.css'
 function MessageList({ messages, currentUser }) {
   return (
     <div className="flex-1 p-2 md:p-4 overflow-y-auto space-y-2">
