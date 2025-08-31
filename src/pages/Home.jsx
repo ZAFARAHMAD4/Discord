@@ -84,16 +84,6 @@ useEffect(() => {
   const [callerEmail, setCallerEmail] = useState(null); // who is calling you (callee)
 
   // reflect local stream to <video>
-
-  useEffect(() => {
-  const handleResize = () => {
-    document.querySelector(".chat-container").style.height = window.innerHeight + "px";
-  };
-  window.addEventListener("resize", handleResize);
-  handleResize();
-  return () => window.removeEventListener("resize", handleResize);
-}, []);
-
   useEffect(() => {
     if (myVideo.current && stream) {
       myVideo.current.srcObject = stream;
@@ -361,7 +351,25 @@ useEffect(() => {
     };
     reader.readAsDataURL(file);
   };
+  // ---------- resize fix for mobile keyboard ----------
+  useEffect(() => {
+    const handleResize = () => {
+      const container = document.querySelector(".chat-container");
+      if (container) {
+        container.style.height = window.innerHeight + "px";
+      }
+    };
+    window.addEventListener("resize", handleResize);
+    handleResize();
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
+  // ---------- sidebar resize ----------
+  useEffect(() => {
+    const updateHeight = () => setSidebarHeight(window.innerHeight);
+    window.addEventListener("resize", updateHeight);
+    return () => window.removeEventListener("resize", updateHeight);
+  }, []);
   // ---------- Signaling listeners ----------
   useEffect(() => {
     if (!socket.current) return;
@@ -560,78 +568,67 @@ useEffect(() => {
       </div>
 
       {/* Right Chat Area */}
-<div className="flex-1 flex flex-col w-full max-h-screen relative">
-  {selectedUser ? (
-    inCall ? (
-      callType === "audio" ? (
-        <AudioCallScreen
-          remoteAudioRef={remoteAudio}
-          callerName={selectedUser?.name}
-          onEndCall={EndCall}
-          onMute={toggleMic}
-          muted={!micOn}
-        />
-      ) : (
-        <VideoCallScreen
-          myVideo={myVideo}
-          remoteVideo={remoteVideo}
-          micOn={micOn}
-          videoOn={videoOn}
-          toggleMic={toggleMic}
-          toggleVideo={toggleVideo}
-          EndCall={EndCall}
-          selectedName={selectedUser?.name}
-        />
-      )
-    ) : (
-      <>
-        {/* ✅ Top bar fixed */}
-        <ChatHeader
-          selectedUser={selectedUser}
-          onBack={() => setSelectedUser(null)}
-          onCallVideo={CallVideo}
-          onCallAudio={CallAudio}
-          showActions={showActions}
-          setShowActions={setShowActions}
-          className="chat-header"
-        />
+      <div className="chat-container flex-1 flex flex-col w-full relative">
+        {selectedUser ? (
+          inCall ? (
+            callType === "audio" ? (
+              <AudioCallScreen
+                remoteAudioRef={remoteAudio}
+                callerName={selectedUser?.name}
+                onEndCall={() => {}}
+                onMute={() => {}}
+                muted={!micOn}
+              />
+            ) : (
+              <VideoCallScreen
+                myVideo={myVideo}
+                remoteVideo={remoteVideo}
+                micOn={micOn}
+                videoOn={videoOn}
+                toggleMic={() => {}}
+                toggleVideo={() => {}}
+                EndCall={() => {}}
+                selectedName={selectedUser?.name}
+              />
+            )
+          ) : (
+            <>
+              <ChatHeader
+                selectedUser={selectedUser}
+                onBack={() => setSelectedUser(null)}
+                onCallVideo={() => {}}
+                onCallAudio={() => {}}
+                showActions={showActions}
+                setShowActions={setShowActions}
+                className="chat-header"
+              />
 
-        {/* ✅ Scrollable middle */}
-        <MessageList
-          messages={messages}
-          currentUser={currentUser}
-          className="message-list"
-        />
+              <MessageList
+                messages={messages}
+                currentUser={currentUser}
+                className="message-list"
+              />
 
-        {/* ✅ Bottom bar fixed */}
-        <MessageInput
-          message={message}
-          setMessage={setMessage}
-          onSend={handleSend}
-          onFileSend={handleFileSend}
-          onVoiceSend={(file) => handleSend(null, file)}
-          className="message-input"
-        />
-      </>
-    )
-  ) : (
-    <main className="container">
-      <p>Hello 👋 I'm</p>
-      <section className="animation">
-        <div className="first">
-          <div>ZAFAR AHMAD</div>
-        </div>
-        <div className="second">
-          <div>Web Developer</div>
-        </div>
-        <div className="third">
-          <div>Software Engineer</div>
-        </div>
-      </section>
-    </main>
-  )}
-</div>
-
+              <MessageInput
+                message={message}
+                setMessage={setMessage}
+                onSend={handleSend}
+                onFileSend={handleFileSend}
+                className="message-input"
+              />
+            </>
+          )
+        ) : (
+          <main className="container">
+            <p>Hello 👋 I'm</p>
+            <section className="animation">
+              <div className="first"><div>ZAFAR AHMAD</div></div>
+              <div className="second"><div>Web Developer</div></div>
+              <div className="third"><div>Software Engineer</div></div>
+            </section>
+          </main>
+        )}
+      </div>
 
       {/* Caller ringing banner */}
       {ringing && <RingingBanner />}

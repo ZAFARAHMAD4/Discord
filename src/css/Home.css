@@ -456,12 +456,6 @@ p {
 }
 
 @media (max-width: 768px) {
-  .chat-container {
-    height: 100dvh; /* ✅ keyboard open hone ke baad bhi adjust */
-    display: flex;
-    flex-direction: column;
-  }
-
   .chat-header {
     position: fixed;
     top: 0;
@@ -475,8 +469,8 @@ p {
 
   .message-list {
     position: absolute;
-    top: 55px;
-    bottom: 60px;
+    top: 55px;    /* header height */
+    bottom: 60px; /* input height */
     left: 0;
     right: 0;
     overflow-y: auto;
@@ -489,10 +483,10 @@ p {
     bottom: 0;
     left: 0;
     right: 0;
-    min-height: 55px;
+    height: 60px;
     background: #fff;
     border-top: 1px solid #ddd;
-    padding: 6px 8px;
+    padding: 8px;
     display: flex;
     align-items: center;
     gap: 8px;
