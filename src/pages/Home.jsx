@@ -307,6 +307,14 @@ function Home() {
       window.removeEventListener("offline", handleOffline);
     };
   }, []);
+ useEffect(() => {
+  const handleResize = () => {
+    document.querySelector(".chat-container").style.height = window.innerHeight + "px";
+  };
+  window.addEventListener("resize", handleResize);
+  handleResize();
+  return () => window.removeEventListener("resize", handleResize);
+}, []);
 
   // ---------- chat send ----------
   const handleSend = () => {
