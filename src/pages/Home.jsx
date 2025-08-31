@@ -27,34 +27,34 @@ function Home() {
   const currentUsers = localStorage.getItem("currentUser");
   const currentUser = currentUsers
     ? {
-        name: JSON.parse(currentUsers).name,
-        email: JSON.parse(currentUsers).email,
-        profilePic: "https://i.pravatar.cc/40?img=2",
-      }
+      name: JSON.parse(currentUsers).name,
+      email: JSON.parse(currentUsers).email,
+      profilePic: "https://i.pravatar.cc/40?img=2",
+    }
     : { name: "Anonymous", email: "unknown@example.com" };
 
   // ---------- fetch users ----------
-useEffect(() => {
-  const fetchUsers = async () => {
-    try {
-      const response = await fetch(`${import.meta.env.VITE_DEV_URL}/api/users`); // ✅ correct API
-      const data = await response.json();
-      console.log(data, "selectedUser");
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const response = await fetch(`${import.meta.env.VITE_DEV_URL}/api/users`); // ✅ correct API
+        const data = await response.json();
+        console.log(data, "selectedUser");
 
-      if (response.ok) {
-        // ✅ backend ka response ka structure check karo
-        const allUsers = data.users || [];
-        const filteredUsers = allUsers.filter(
-          (user) => user.email !== currentUser.email
-        );
-        setUsers(filteredUsers);
+        if (response.ok) {
+          // ✅ backend ka response ka structure check karo
+          const allUsers = data.users || [];
+          const filteredUsers = allUsers.filter(
+            (user) => user.email !== currentUser.email
+          );
+          setUsers(filteredUsers);
+        }
+      } catch (err) {
+        console.error("Error fetching users:", err);
       }
-    } catch (err) {
-      console.error("Error fetching users:", err);
-    }
-  };
-  fetchUsers();
-}, []);
+    };
+    fetchUsers();
+  }, []);
 
 
   // ---------- resize ----------
@@ -178,7 +178,7 @@ useEffect(() => {
           from: currentUser.email,
         });
       }
-    } catch {}
+    } catch { }
     cleanupCall();
   };
 
@@ -525,17 +525,16 @@ useEffect(() => {
     setCallerEmail(null);
     setCallType(null);
   };
-  console.log(users,'usershome')
-  console.log(selectedUser,'selectedUserhome')
+  console.log(users, 'usershome')
+  console.log(selectedUser, 'selectedUserhome')
 
   // ---------- Render ----------
   return (
     <div className="flex w-full h-screen bgg">
       {/* Left Sidebar */}
       <div
-        className={`${
-          selectedUser && window.innerWidth < 768 ? "hidden" : "block"
-        } w-full md:w-1/4 lg:w-1/5 bg-base-200 border-r custom-sidebar`}
+        className={`${selectedUser && window.innerWidth < 768 ? "hidden" : "block"
+          } w-full md:w-1/4 lg:w-1/5 bg-base-200 border-r custom-sidebar`}
         style={{ height: sidebarHeight }}
       >
         <Sidebar
@@ -550,12 +549,12 @@ useEffect(() => {
       </div>
 
       {/* Right Chat Area */}
-      <div className="flex-1 flex flex-col w-full max-h-screen">
+      <div className="flex-1 flex flex-col w-full max-h-screen relative">
         {selectedUser ? (
           inCall ? (
             callType === "audio" ? (
               <AudioCallScreen
-                remoteAudioRef={remoteAudio} // ✅ stream is set by pc.ontrack
+                remoteAudioRef={remoteAudio}
                 callerName={selectedUser?.name}
                 onEndCall={EndCall}
                 onMute={toggleMic}
@@ -575,23 +574,32 @@ useEffect(() => {
             )
           ) : (
             <>
+              {/* ✅ Top bar fixed */}
               <ChatHeader
                 selectedUser={selectedUser}
                 onBack={() => setSelectedUser(null)}
                 onCallVideo={CallVideo}
-                onCallAudio={CallAudio}   // ✅ audio call button
+                onCallAudio={CallAudio}
                 showActions={showActions}
                 setShowActions={setShowActions}
+                className="chat-header"
               />
 
-              <MessageList messages={messages} currentUser={currentUser} />
+              {/* ✅ Scrollable middle */}
+              <MessageList
+                messages={messages}
+                currentUser={currentUser}
+                className="message-list"
+              />
 
+              {/* ✅ Bottom bar fixed */}
               <MessageInput
                 message={message}
                 setMessage={setMessage}
                 onSend={handleSend}
                 onFileSend={handleFileSend}
-                onVoiceSend={(file) => handleSend(null, file)} // voice file bhi bhejna
+                onVoiceSend={(file) => handleSend(null, file)}
+                className="message-input"
               />
             </>
           )
@@ -612,6 +620,7 @@ useEffect(() => {
           </main>
         )}
       </div>
+
 
       {/* Caller ringing banner */}
       {ringing && <RingingBanner />}
