@@ -27,34 +27,34 @@ function Home() {
   const currentUsers = localStorage.getItem("currentUser");
   const currentUser = currentUsers
     ? {
-      name: JSON.parse(currentUsers).name,
-      email: JSON.parse(currentUsers).email,
-      profilePic: "https://i.pravatar.cc/40?img=2",
-    }
+        name: JSON.parse(currentUsers).name,
+        email: JSON.parse(currentUsers).email,
+        profilePic: "https://i.pravatar.cc/40?img=2",
+      }
     : { name: "Anonymous", email: "unknown@example.com" };
 
   // ---------- fetch users ----------
-  useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const response = await fetch(`${import.meta.env.VITE_DEV_URL}/api/users`); // ✅ correct API
-        const data = await response.json();
-        console.log(data, "selectedUser");
+useEffect(() => {
+  const fetchUsers = async () => {
+    try {
+      const response = await fetch(`${import.meta.env.VITE_DEV_URL}/api/users`); // ✅ correct API
+      const data = await response.json();
+      console.log(data, "selectedUser");
 
-        if (response.ok) {
-          // ✅ backend ka response ka structure check karo
-          const allUsers = data.users || [];
-          const filteredUsers = allUsers.filter(
-            (user) => user.email !== currentUser.email
-          );
-          setUsers(filteredUsers);
-        }
-      } catch (err) {
-        console.error("Error fetching users:", err);
+      if (response.ok) {
+        // ✅ backend ka response ka structure check karo
+        const allUsers = data.users || [];
+        const filteredUsers = allUsers.filter(
+          (user) => user.email !== currentUser.email
+        );
+        setUsers(filteredUsers);
       }
-    };
-    fetchUsers();
-  }, []);
+    } catch (err) {
+      console.error("Error fetching users:", err);
+    }
+  };
+  fetchUsers();
+}, []);
 
 
   // ---------- resize ----------
@@ -84,6 +84,16 @@ function Home() {
   const [callerEmail, setCallerEmail] = useState(null); // who is calling you (callee)
 
   // reflect local stream to <video>
+
+  useEffect(() => {
+  const handleResize = () => {
+    document.querySelector(".chat-container").style.height = window.innerHeight + "px";
+  };
+  window.addEventListener("resize", handleResize);
+  handleResize();
+  return () => window.removeEventListener("resize", handleResize);
+}, []);
+
   useEffect(() => {
     if (myVideo.current && stream) {
       myVideo.current.srcObject = stream;
@@ -178,7 +188,7 @@ function Home() {
           from: currentUser.email,
         });
       }
-    } catch { }
+    } catch {}
     cleanupCall();
   };
 
@@ -307,14 +317,6 @@ function Home() {
       window.removeEventListener("offline", handleOffline);
     };
   }, []);
- useEffect(() => {
-  const handleResize = () => {
-    document.querySelector(".chat-container").style.height = window.innerHeight + "px";
-  };
-  window.addEventListener("resize", handleResize);
-  handleResize();
-  return () => window.removeEventListener("resize", handleResize);
-}, []);
 
   // ---------- chat send ----------
   const handleSend = () => {
@@ -533,16 +535,17 @@ function Home() {
     setCallerEmail(null);
     setCallType(null);
   };
-  console.log(users, 'usershome')
-  console.log(selectedUser, 'selectedUserhome')
+  console.log(users,'usershome')
+  console.log(selectedUser,'selectedUserhome')
 
   // ---------- Render ----------
   return (
     <div className="flex w-full h-screen bgg">
       {/* Left Sidebar */}
       <div
-        className={`${selectedUser && window.innerWidth < 768 ? "hidden" : "block"
-          } w-full md:w-1/4 lg:w-1/5 bg-base-200 border-r custom-sidebar`}
+        className={`${
+          selectedUser && window.innerWidth < 768 ? "hidden" : "block"
+        } w-full md:w-1/4 lg:w-1/5 bg-base-200 border-r custom-sidebar`}
         style={{ height: sidebarHeight }}
       >
         <Sidebar
@@ -557,77 +560,77 @@ function Home() {
       </div>
 
       {/* Right Chat Area */}
-      <div className="flex-1 flex flex-col w-full max-h-screen relative">
-        {selectedUser ? (
-          inCall ? (
-            callType === "audio" ? (
-              <AudioCallScreen
-                remoteAudioRef={remoteAudio}
-                callerName={selectedUser?.name}
-                onEndCall={EndCall}
-                onMute={toggleMic}
-                muted={!micOn}
-              />
-            ) : (
-              <VideoCallScreen
-                myVideo={myVideo}
-                remoteVideo={remoteVideo}
-                micOn={micOn}
-                videoOn={videoOn}
-                toggleMic={toggleMic}
-                toggleVideo={toggleVideo}
-                EndCall={EndCall}
-                selectedName={selectedUser?.name}
-              />
-            )
-          ) : (
-            <>
-              {/* ✅ Top bar fixed */}
-              <ChatHeader
-                selectedUser={selectedUser}
-                onBack={() => setSelectedUser(null)}
-                onCallVideo={CallVideo}
-                onCallAudio={CallAudio}
-                showActions={showActions}
-                setShowActions={setShowActions}
-                className="chat-header"
-              />
+<div className="flex-1 flex flex-col w-full max-h-screen relative">
+  {selectedUser ? (
+    inCall ? (
+      callType === "audio" ? (
+        <AudioCallScreen
+          remoteAudioRef={remoteAudio}
+          callerName={selectedUser?.name}
+          onEndCall={EndCall}
+          onMute={toggleMic}
+          muted={!micOn}
+        />
+      ) : (
+        <VideoCallScreen
+          myVideo={myVideo}
+          remoteVideo={remoteVideo}
+          micOn={micOn}
+          videoOn={videoOn}
+          toggleMic={toggleMic}
+          toggleVideo={toggleVideo}
+          EndCall={EndCall}
+          selectedName={selectedUser?.name}
+        />
+      )
+    ) : (
+      <>
+        {/* ✅ Top bar fixed */}
+        <ChatHeader
+          selectedUser={selectedUser}
+          onBack={() => setSelectedUser(null)}
+          onCallVideo={CallVideo}
+          onCallAudio={CallAudio}
+          showActions={showActions}
+          setShowActions={setShowActions}
+          className="chat-header"
+        />
 
-              {/* ✅ Scrollable middle */}
-              <MessageList
-                messages={messages}
-                currentUser={currentUser}
-                className="message-list"
-              />
+        {/* ✅ Scrollable middle */}
+        <MessageList
+          messages={messages}
+          currentUser={currentUser}
+          className="message-list"
+        />
 
-              {/* ✅ Bottom bar fixed */}
-              <MessageInput
-                message={message}
-                setMessage={setMessage}
-                onSend={handleSend}
-                onFileSend={handleFileSend}
-                onVoiceSend={(file) => handleSend(null, file)}
-                className="message-input"
-              />
-            </>
-          )
-        ) : (
-          <main className="container">
-            <p>Hello 👋 I'm</p>
-            <section className="animation">
-              <div className="first">
-                <div>ZAFAR AHMAD</div>
-              </div>
-              <div className="second">
-                <div>Web Developer</div>
-              </div>
-              <div className="third">
-                <div>Software Engineer</div>
-              </div>
-            </section>
-          </main>
-        )}
-      </div>
+        {/* ✅ Bottom bar fixed */}
+        <MessageInput
+          message={message}
+          setMessage={setMessage}
+          onSend={handleSend}
+          onFileSend={handleFileSend}
+          onVoiceSend={(file) => handleSend(null, file)}
+          className="message-input"
+        />
+      </>
+    )
+  ) : (
+    <main className="container">
+      <p>Hello 👋 I'm</p>
+      <section className="animation">
+        <div className="first">
+          <div>ZAFAR AHMAD</div>
+        </div>
+        <div className="second">
+          <div>Web Developer</div>
+        </div>
+        <div className="third">
+          <div>Software Engineer</div>
+        </div>
+      </section>
+    </main>
+  )}
+</div>
 
 
       {/* Caller ringing banner */}
