@@ -614,7 +614,7 @@ useEffect(() => {
       </div>
 
       {/* Caller ringing banner */}
-      {ringing && <RingingBanner />}
+      {ringing && <RingingBanner   user={selectedUser} onEnd={EndCall}/>}
 
       {/* Incoming Call Popup */}
       {incomingCall && (
