@@ -15,15 +15,17 @@ function App() {
     const data = localStorage.getItem("currentUser");
 
     if (data) {
-      // ✅ Agar user login hai → usko hamesha /home pe bhej do
-      if (location.pathname !== "/home") {
+      // Agar user login hai → sirf login/signup/forgot-password pe jaane se roko
+      if (
+        location.pathname === "/" ||
+        location.pathname === "/Signup" ||
+        location.pathname === "/forgot-password"
+      ) {
         navigate("/home");
       }
     } else {
-      // ✅ Agar user login nahi hai → usko /login pe bhej do
-      // Lekin forgot-password & signup pe jane do
-      const allowedPaths = ["/", "/forgot-password", "/Signup"];
-      if (!allowedPaths.includes(location.pathname)) {
+      // Agar user login nahi hai → sirf protected pages (like /home) pe jaane se roko
+      if (location.pathname === "/home") {
         navigate("/");
       }
     }
