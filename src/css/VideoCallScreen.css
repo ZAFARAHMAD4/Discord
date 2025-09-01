@@ -100,21 +100,28 @@
 /* ✅ Mobile Responsive */
 @media (max-width: 768px) {
   .vc-stage {
-    flex-direction: column;
+    /* flex-direction: column; */
+    gap: 12px;
   }
+
   .vc-video-box {
-    max-width: 100%;
-    height: 45%;
+    width: 100%;
+    flex: 1;
+    aspect-ratio: 16 / 9;   /* auto responsive height */
+    max-height: 50vh;       /* video half screen se jyada na le */
   }
+
   .vc-controls {
     gap: 12px;
     padding: 10px;
   }
+
   .vc-btn {
     width: 45px;
     height: 45px;
     font-size: 20px;
   }
+
   .vc-title {
     font-size: 14px;
   }
@@ -122,8 +129,10 @@
 
 @media (max-width: 480px) {
   .vc-video-box {
-    height: 40%;
+    aspect-ratio: 9 / 16;  /* chhoti screen pe portrait friendly */
+    max-height: 45vh;
   }
+
   .vc-btn {
     width: 42px;
     height: 42px;
