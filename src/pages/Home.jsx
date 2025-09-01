@@ -9,8 +9,12 @@ import AudioCallScreen from "../components/AudioCallScreen"; // ✅ NEW
 import IncomingCallPopup from "../components/IncomingCallPopup";
 import RingingBanner from "../components/RingingBanner";
 import "../css/Home.css";
-
+import AOS from "aos";
+import "aos/dist/aos.css";
 function Home() {
+  useEffect(() => {
+  AOS.init({ duration: 800 });
+}, []);
   const socket = useRef(null);
 
   // ---------- UI states ----------
@@ -582,6 +586,7 @@ useEffect(() => {
                 onCallAudio={CallAudio}   // ✅ audio call button
                 showActions={showActions}
                 setShowActions={setShowActions}
+                
               />
 
               <MessageList messages={messages} currentUser={currentUser} />

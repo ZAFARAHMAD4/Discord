@@ -1,47 +1,48 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router";
+import { LuLogIn } from "react-icons/lu";
 const Login = () => {
-  const [formData, setFormData] = useState({ number: "", password: "" });
+  const [formData, setFormData] = useState({ email: "", password: "" });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
-const navigate = useNavigate();
-const handleLogin = async (e) => {
-  e.preventDefault();
-  setLoading(true);
-  setError("");
+  const navigate = useNavigate();
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError("");
 
-  const number = formData.number.trim();
-  const trimmedPassword = formData.password.trim();
+    const email = formData.email.trim();
+    const trimmedPassword = formData.password.trim();
 
-  try {
-    const response = await axios.post(`${import.meta.env.VITE_DEV_URL}/api/login`, {
-      enrollmentNumber: number,
-      password: trimmedPassword,
-    });
+    try {
+      const response = await axios.post(`${import.meta.env.VITE_DEV_URL}/api/login`, {
+        email: email,
+        password: trimmedPassword,
+      });
 
-    console.log(number, "enroll");
-    console.log(response.data, "response");
+      console.log(email, "enroll");
+      console.log(response.data, "response");
 
-    if (response.data && response.data.user) {
-      localStorage.setItem("currentUser", JSON.stringify(response.data.user));
-      // window.location.href = "/home";
-      navigate('/home')
-      
-    } else {
+      if (response.data && response.data.user) {
+        localStorage.setItem("currentUser", JSON.stringify(response.data.user));
+        // window.location.href = "/home";
+        navigate('/home')
+
+      } else {
+        setError("Invalid credentials. Please try again.");
+      }
+    } catch (err) {
+      console.error(err.response?.data || err.message);
       setError("Invalid credentials. Please try again.");
+    } finally {
+      setLoading(false);
     }
-  } catch (err) {
-    console.error(err.response?.data || err.message);
-    setError("Invalid credentials. Please try again.");
-  } finally {
-    setLoading(false);
-  }
-};
+  };
 
 
   const handleGoogleLogin = () => {
@@ -57,14 +58,14 @@ const handleLogin = async (e) => {
         <form className="card-body" onSubmit={handleLogin}>
           <fieldset className="fieldset">
             <label className="label">
-              <span className="label-text text-white">Enrollment Number</span>
+              <span className="label-text text-white">Email Id</span>
             </label>
             <input
-              type="text"
-              name="number"
+              type="email"
+              name="email"
               className="gradient-input w-full"
-              placeholder="Enter Your Enrollment Number"
-              value={formData.number}
+              placeholder="Enter Your Email Id"
+              value={formData.email}
               onChange={handleChange}
               required
             />
@@ -82,9 +83,13 @@ const handleLogin = async (e) => {
               required
             />
 
+
             <div className="text-right mt-2">
-              <a className="link link-hover text-sm gradient-link">Forgot password?</a>
+              <Link to="/forgot-password" className="link link-hover text-sm gradient-link">
+                Forgot password?
+              </Link>
             </div>
+
 
 
             {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
@@ -92,7 +97,7 @@ const handleLogin = async (e) => {
               className={`animated-gradient-btn mt-4`}
               type="submit"
               disabled={loading}
-            >
+            > <LuLogIn className="me-2" />
               {loading ? (
                 <span className="loading loading-infinity loading-md"></span>
               ) : (
@@ -101,7 +106,7 @@ const handleLogin = async (e) => {
             </button>
 
 
-            <div className="divider">OR</div>
+            <div className="divider text-white">--- OR ---</div>
             <Link
               to="/Signup" // 👈 Change this to your target route
               className="animated-gradient-btn w-full flex items-center justify-center gap-2"

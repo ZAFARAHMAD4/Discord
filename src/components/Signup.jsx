@@ -5,7 +5,6 @@ import { Link } from "react-router-dom";
 function Signup() {
   const [formData, setFormData] = useState({
     name: "",
-    enrollmentNumber: "",
     email: "",
     password: "",
     confirmPassword: "",
@@ -34,7 +33,6 @@ function Signup() {
     try {
       const response = await axios.post(`${import.meta.env.VITE_DEV_URL}/api/users/signup`, {
         name: formData.name,
-        enrollmentNumber: formData.enrollmentNumber.trim(),
         email: formData.email.trim(),
         password: formData.password.trim(),
       });
@@ -43,10 +41,8 @@ function Signup() {
         setSuccess("✅ Account created successfully! Please login.");
         setFormData({
           name: "",
-          enrollmentNumber: "",
           email: "",
           password: "",
-          confirmPassword: "",
         });
       }
     } catch (err) {
@@ -71,19 +67,6 @@ function Signup() {
               className="gradient-input w-full"
               placeholder="Enter your full name"
               value={formData.name}
-              onChange={handleChange}
-              required
-            />
-
-            <label className="label">
-              <span className="label-text text-white">Enrollment Number</span>
-            </label>
-            <input
-              type="text"
-              name="enrollmentNumber"
-              className="gradient-input w-full"
-              placeholder="Enrollment Number"
-              value={formData.enrollmentNumber}
               onChange={handleChange}
               required
             />

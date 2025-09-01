@@ -1,11 +1,17 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { FiPaperclip, FiSend } from "react-icons/fi";
-
+import AOS from "aos";
+import "aos/dist/aos.css";
 function MessageInput({ message, setMessage, onSend, onFileSend }) {
   const fileInputRef = useRef(null);
+    useEffect(() => {
+    AOS.init({ duration: 800, once: true });
+    AOS.refresh();
+  }, []);
 
   return (
-    <div className="p-2 md:p-4 border-t bg-base-100 flex items-center gap-2">
+    <div className="p-2 md:p-4 border-t bg-base-100 flex items-center gap-2" data-aos="fade-up"
+     data-aos-anchor-placement="center-bottom" >
       <input
         ref={fileInputRef}
         type="file"

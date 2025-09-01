@@ -1,8 +1,14 @@
-import React from "react";
-
+import React, { useEffect } from "react";
+import AOS from "aos";
+import "aos/dist/aos.css";
 function MessageList({ messages, currentUser }) {
+    useEffect(() => {
+      AOS.init({ duration: 800, once: true });
+      AOS.refresh();
+    }, []);
+  
   return (
-    <div className="flex-1 p-2 md:p-4 overflow-y-auto space-y-2">
+    <div className="flex-1 p-2 md:p-4 overflow-y-auto space-y-2"  data-aos="fade-left">
       {messages.length > 0 ? (
         messages.map((msg, idx) => (
           <div

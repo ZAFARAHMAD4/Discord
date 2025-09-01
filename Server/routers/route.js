@@ -7,11 +7,11 @@ const User=require("../model/User")
 
 router.post("/signup", async (req, res) => {
   try {
-    const { name, enrollmentNumber, email, password } = req.body;
+    const { name, email, password } = req.body;
 
     console.log("📩 Incoming body:", req.body); // 👈 Debug step
 
-    const newUser = new User({ name, enrollmentNumber, email, password });
+    const newUser = new User({ name, email, password });
     await newUser.save();
 
     res.status(201).json({
@@ -29,12 +29,13 @@ router.post("/signup", async (req, res) => {
 
 router.post("/users/signup", async (req, res) => {
   try {
-    const { name, enrollmentNumber, email, password } = req.body;
+    const { name, email, password } = req.body;
 
     // // basic validation
     // if (!enrollmentNumber || !email || !password) {
     //   return res.status(400).json({ error: "All fields are required" });
     // }
+    console.log(name, email, password)
 
     // check if user already exists
     const exists = await User.findOne({ email });
@@ -43,7 +44,7 @@ router.post("/users/signup", async (req, res) => {
     }
 
     // save new user
-    const user = new User({ name, enrollmentNumber, email, password });
+    const user = new User({ name, email, password });
     await user.save();
 
     res.status(201).json({ message: "User created successfully", user });
@@ -55,10 +56,10 @@ router.post("/users/signup", async (req, res) => {
 
 router.post("/login", async (req, res) => {
   try {
-    const { enrollmentNumber, password } = req.body;
+    const { email, password } = req.body;
 
     // Check if user exists
-    const user = await User.findOne({ enrollmentNumber });
+    const user = await User.findOne({ email });
     if (!user) {
       return res.status(400).json({ error: "User not found" });
     }
@@ -82,6 +83,37 @@ router.get("/users", async (req, res) => {
     res.status(200).json({ users }); // Response as { users: [...] }
   } catch (err) {
     res.status(500).json({ error: err.message });
+  }
+});
+
+// 🔹 Forget Password API
+router.post("/forgot-password", async (req, res) => {
+  try {
+    const { email, name, newPassword, confirmPassword } = req.body;
+
+    // Basic validation
+    if (!email || !name || !newPassword || !confirmPassword) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
+
+    if (newPassword !== confirmPassword) {
+      return res.status(400).json({ message: "Passwords do not match" });
+    }
+
+    // User find
+    const user = await User.findOne({ email, name });
+    if (!user) {
+      return res.status(404).json({ message: "User not found with this Email and Name" });
+    }
+
+    // Update password (plain, agar hashing chahiye to bcrypt use karna)
+    user.password = newPassword;
+    await user.save();
+
+    res.json({ message: "Password updated successfully ✅" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
   }
 });
 

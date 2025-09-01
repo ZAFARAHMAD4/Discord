@@ -1,32 +1,54 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { FaEdit } from "react-icons/fa";
-import '../css/Avatar.css'
+import AOS from "aos";
+import "aos/dist/aos.css";
+import "../css/Avatar.css";
+import { Navigate, useNavigate } from "react-router";
+
+import { IoIosSave } from "react-icons/io";
+import { FiLogOut } from "react-icons/fi"
 function Sidebar({ users, selectedUser, setSelectedUser, currentUser }) {
-  // Function to get initials from name
+  const [isOffcanvasOpen, setIsOffcanvasOpen] = useState(false);
+
   const getInitials = (name = "") => {
     return name
-      .split(" ") // naam ko words me todho
-      .map((n) => n[0]?.toUpperCase()) // har word ka pehla letter
-      .join(""); // join karke return
+      .split(" ")
+      .map((n) => n[0]?.toUpperCase())
+      .join("");
   };
+
+  useEffect(() => {
+    AOS.init({
+      duration: 800,
+      easing: "ease-out-cubic",
+      once: true,
+    });
+  }, [selectedUser]);
+  const navigate = useNavigate();
+
 
   return (
     <>
       {/* Current User Header */}
-      <div className="p-4 border-b flex items-center justify-between bg-primary text-primary-content">
+      <div
+        className="p-4 border-b flex items-center justify-between bg-primary text-primary-content"
+        data-aos="zoom-in-up"
+      >
         <div className="flex items-center gap-3">
-          <div className="avatar placeholder">
+          <div className="avatar placeholder relative">
             <div className="bg-neutral-focus text-neutral-content w-12 rounded-full flex items-center justify-center">
               <span className="text-lg font-bold avatar-placeholder">
                 {getInitials(currentUser.name || currentUser.email)}
               </span>
             </div>
-            <div className="edit cursor-pointer"> <FaEdit /> </div>
+            <div
+              className="edit cursor-pointer absolute -bottom-1 -right-1 bg-white text-primary rounded-full p-1 shadow"
+              onClick={() => setIsOffcanvasOpen(true)}
+            >
+              <FaEdit size={14} />
+            </div>
           </div>
           <div className="name font-medium">{currentUser.name}</div>
-          <div className="edit text-sm cursor-pointer ml-2">
-            <FaEdit />
-          </div>
         </div>
         <span className="badge badge-accent">{users.length}</span>
       </div>
@@ -37,16 +59,16 @@ function Sidebar({ users, selectedUser, setSelectedUser, currentUser }) {
           users.map((user, index) => (
             <li
               key={index}
-              className={`rounded-lg cursor-pointer transition-all hover:bg-primary hover:text-white shadow-sm mb-1 ${
-                selectedUser?.email === user.email ? "bg-primary text-white" : ""
-              }`}
+              data-aos="fade-left"
+              data-aos-delay={index * 100}
+              className={`rounded-lg cursor-pointer transition-all hover:bg-primary hover:text-white shadow-sm mb-1 ${selectedUser?.email === user.email ? "bg-primary text-white" : ""
+                }`}
               onClick={() => setSelectedUser(user)}
             >
               <div className="flex items-center gap-3 p-2">
                 <div
-                  className={`avatar placeholder ${
-                    user.online ? "online" : "offline"
-                  }`}
+                  className={`avatar placeholder ${user.online ? "online" : "offline"
+                    }`}
                 >
                   <div className="bg-neutral-focus text-neutral-content w-12 rounded-full flex items-center justify-center">
                     <span className="text-md font-semibold avatar-placeholder">
@@ -59,9 +81,8 @@ function Sidebar({ users, selectedUser, setSelectedUser, currentUser }) {
                     {user.name || user.email}
                   </p>
                   <span
-                    className={`badge badge-xs mt-1 ${
-                      user.online ? "badge-success" : "badge-ghost"
-                    }`}
+                    className={`badge badge-xs mt-1 ${user.online ? "badge-success" : "badge-ghost"
+                      }`}
                   >
                     {user.online ? "Online" : "Offline"}
                   </span>
@@ -75,6 +96,58 @@ function Sidebar({ users, selectedUser, setSelectedUser, currentUser }) {
           </div>
         )}
       </ul>
+
+      {/* Offcanvas (Profile Edit Drawer) */}
+      {isOffcanvasOpen && (
+        <div className="fixed inset-0 z-50 flex">
+          {/* Background Overlay */}
+          <div
+            className="fixed inset-0 bg-black bg-opacity-50"
+            onClick={() => setIsOffcanvasOpen(false)}
+          ></div>
+
+          {/* Drawer */}
+          <div className="relative w-80 bg-white h-full shadow-lg z-50 p-6 animate-slideInRight">
+            <button
+              className="absolute top-3 right-3 btn btn-sm btn-circle"
+              onClick={() => setIsOffcanvasOpen(false)}
+            >
+              ✕
+            </button>
+            <h2 className="text-xl font-bold mb-4">Edit Profile</h2>
+
+            {/* Example Form */}
+            <form className="flex flex-col gap-3">
+              <input
+                type="text"
+                placeholder="Name"
+                defaultValue={currentUser.name}
+                className="input input-bordered w-full"
+              />
+              <input
+                type="email"
+                placeholder="Email"
+                defaultValue={currentUser.email}
+                className="input input-bordered w-full"
+              />
+              <button className="btn btn-primary w-full mt-3">
+                Save Changes  <IoIosSave />
+              </button>
+              <button
+                type="button"
+                className="btn btn-primary w-full mt-3"
+                onClick={() => {
+                  localStorage.removeItem("currentUser"); // storage se user hatao
+                  navigate("/"); // login page pe bhejo
+                }}
+              >
+                Logout <FiLogOut />
+              </button>
+
+            </form>
+          </div>
+        </div>
+      )}
     </>
   );
 }

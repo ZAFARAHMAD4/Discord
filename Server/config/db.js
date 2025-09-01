@@ -14,6 +14,8 @@ require("dotenv").config();
 // mongodb+srv://zafarahmad:2a2q8mOQuvJg44ll@cluster0.zffii.mongodb.net/discord?retryWrites=true&w=majority&appName=Cluster0
 // module.exports = connectDB;
 const connectDB = async () => {
+
+  // mongodb+srv://zafarahmad:2a2q8mOQuvJg44ll@cluster0.zffii.mongodb.net/discord?retryWrites=true&w=majority&appName=Cluster0
   try {
     const conn = await mongoose.connect("mongodb+srv://zafarahmad:2a2q8mOQuvJg44ll@cluster0.zffii.mongodb.net/discord?retryWrites=true&w=majority&appName=Cluster0");
     // const conn = await mongoose.connect("mongodb://localhost:27017/test1");

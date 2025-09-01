@@ -14,3 +14,53 @@ html ,body{
   width: 48px; /* Same as w-12 */
   height: 48px; /* Same as w-12 */
 }
+/* Avatar wrapper */
+.avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+/* Agar profile image na ho to initials show karne ke liye */
+.avatar-initial {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, #2563eb, #4f46e5); /* Tailwind blue-600 to indigo-700 */
+  color: white;
+  font-weight: 600;
+  font-size: 1rem;
+  border-radius: 9999px; /* fully rounded */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-transform: uppercase;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+/* Responsive sizing for bigger screens */
+@media (min-width: 768px) {
+  .avatar-initial {
+    width: 48px;
+    height: 48px;
+    font-size: 1.1rem;
+  }
+}
+
+/* Hover effect for call action buttons (optional) */
+.btn-ghost:hover {
+  background-color: #f3f4f6; /* Tailwind gray-100 */
+  transition: background 0.2s ease-in-out;
+}
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.animate-slideInRight {
+  animation: slideInRight 0.3s ease-out forwards;
+}
