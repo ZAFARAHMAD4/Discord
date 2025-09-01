@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { FaEnvelope, FaUser, FaLock } from "react-icons/fa";
+import "../css/ForgetPassword.css"; // custom css import
 
 function ForgetPassword() {
   const [formData, setFormData] = useState({
     email: "",
     name: "",
     newPassword: "",
-    confirmPassword: ""
+    confirmPassword: "",
   });
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
@@ -32,49 +34,82 @@ function ForgetPassword() {
   };
 
   return (
-    <div className="hero min-h-screen bg-gray-900 flex items-center justify-center p-5">
-      <div className="card bg-gray-800 w-full max-w-sm p-6 rounded-2xl shadow-lg">
-        <h2 className="text-white text-2xl mb-4 text-center">Reset Password</h2>
-        <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-          <input
-            type="email"
-            name="email"
-            placeholder="Enter Email"
-            className="input input-bordered w-full"
-            value={formData.email}
-            onChange={handleChange}
-            required
-          />
-          <input
-            type="text"
-            name="name"
-            placeholder="Enter Name"
-            className="input input-bordered w-full"
-            value={formData.name}
-            onChange={handleChange}
-            required
-          />
-          <input
-            type="password"
-            name="newPassword"
-            placeholder="New Password"
-            className="input input-bordered w-full"
-            value={formData.newPassword}
-            onChange={handleChange}
-            required
-          />
-          <input
-            type="password"
-            name="confirmPassword"
-            placeholder="Confirm Password"
-            className="input input-bordered w-full"
-            value={formData.confirmPassword}
-            onChange={handleChange}
-            required
-          />
-          {error && <p className="text-red-500 text-sm">{error}</p>}
-          {message && <p className="text-green-500 text-sm">{message}</p>}
-          <button type="submit" className="btn btn-primary w-full">Update Password</button>
+    <div className="forget-container">
+      <div className="forget-card">
+        <h2 className="forget-title">Reset Password</h2>
+
+        <form
+          onSubmit={handleSubmit}
+          className="forget-form"
+          autoComplete="off" // 🔴 autofill disable
+        >
+          {/* Email */}
+          <div className="input-group">
+            <FaEnvelope className="input-icon" />
+            <input
+              type="email"
+              name="email"
+              placeholder="Enter Email"
+              className="input-field"
+              value={formData.email}
+              onChange={handleChange}
+              autoComplete="off" // 🔴 autofill disable
+              required
+            />
+          </div>
+
+          {/* Name */}
+          <div className="input-group">
+            <FaUser className="input-icon" />
+            <input
+              type="text"
+              name="name"
+              placeholder="Enter Name"
+              className="input-field"
+              value={formData.name}
+              onChange={handleChange}
+              autoComplete="off" // 🔴 autofill disable
+              required
+            />
+          </div>
+
+          {/* New Password */}
+          <div className="input-group">
+            <FaLock className="input-icon" />
+            <input
+              type="password"
+              name="newPassword"
+              placeholder="New Password"
+              className="input-field"
+              value={formData.newPassword}
+              onChange={handleChange}
+              autoComplete="new-password" // 🔴 recommended for password fields
+              required
+            />
+          </div>
+
+          {/* Confirm Password */}
+          <div className="input-group">
+            <FaLock className="input-icon" />
+            <input
+              type="password"
+              name="confirmPassword"
+              placeholder="Confirm Password"
+              className="input-field"
+              value={formData.confirmPassword}
+              onChange={handleChange}
+              autoComplete="new-password" // 🔴 recommended for password fields
+              required
+            />
+          </div>
+
+          {/* Error & Success */}
+          {error && <p className="error-msg">{error}</p>}
+          {message && <p className="success-msg">{message}</p>}
+
+          <button type="submit" className="submit-btn">
+            Update Password
+          </button>
         </form>
       </div>
     </div>

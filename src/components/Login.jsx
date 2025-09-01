@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router";
 import { LuLogIn } from "react-icons/lu";
+import { MdEmail } from "react-icons/md";
+import { FaLock } from "react-icons/fa";
 const Login = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [loading, setLoading] = useState(false);
@@ -56,69 +58,69 @@ const Login = () => {
       {/* Right Card Form */}
       <div className="card bglogin w-full max-w-sm shrink-0 shadow-2xl">
         <form className="card-body" onSubmit={handleLogin}>
-          <fieldset className="fieldset">
-            <label className="label">
-              <span className="label-text text-white">Email Id</span>
-            </label>
+          <div className="input-wrapper">
+            <MdEmail className="input-icon" />
             <input
               type="email"
               name="email"
               className="gradient-input w-full"
-              placeholder="Enter Your Email Id"
+              placeholder="Enter Email"
               value={formData.email}
               onChange={handleChange}
               required
+              autoComplete="off"
             />
+          </div>
 
-            <label className="label mt-3">
-              <span className="label-text text-white">Password</span>
-            </label>
+          <div className="input-wrapper">
+            <FaLock className="input-icon" />
             <input
               type="password"
               name="password"
               className="gradient-input w-full"
-              placeholder="Password"
+              placeholder="Enter Password"
               value={formData.password}
               onChange={handleChange}
               required
+              autoComplete="new-password"
             />
+          </div>
 
-
-            <div className="text-right mt-2">
-              <Link to="/forgot-password" className="link link-hover text-sm gradient-link">
-                Forgot password?
-              </Link>
-            </div>
-
-
-
-            {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
-            <button
-              className={`animated-gradient-btn mt-4`}
-              type="submit"
-              disabled={loading}
-            > <LuLogIn className="me-2" />
-              {loading ? (
-                <span className="loading loading-infinity loading-md"></span>
-              ) : (
-                "Login"
-              )}
-            </button>
-
-
-            <div className="divider text-white">--- OR ---</div>
+          <div className="text-right mt-2">
             <Link
-              to="/Signup" // 👈 Change this to your target route
-              className="animated-gradient-btn w-full flex items-center justify-center gap-2"
+              to="/forgot-password"
+              className="link link-hover text-sm gradient-link"
             >
-              <img
-                src="https://img.icons8.com/color/16/000000/google-logo.png"
-                alt="Google"
-              />
-              Create a New Account
+              Forgot password?
             </Link>
+          </div>
 
-          </fieldset>
+          {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
+
+          <button
+            className="animated-gradient-btn mt-4 flex items-center justify-center gap-2"
+            type="submit"
+            disabled={loading}
+          >
+            <LuLogIn className="me-2" />
+            {loading ? (
+              <span className="loading loading-infinity loading-md"></span>
+            ) : (
+              "Login"
+            )}
+          </button>
+
+          <div className="divider text-white">--- OR ---</div>
+          <Link
+            to="/Signup"
+            className="animated-gradient-btn w-full flex items-center justify-center gap-2"
+          >
+            <img
+              src="https://img.icons8.com/color/16/000000/google-logo.png"
+              alt="Google"
+            />
+            Create a New Account
+          </Link>
         </form>
       </div>
 

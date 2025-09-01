@@ -2,6 +2,7 @@ import React from "react";
 import { FiMic, FiVideo } from "react-icons/fi";
 import { FaPhoneSlash } from "react-icons/fa";
 import { IoIosArrowBack } from "react-icons/io";
+import '../css/VideoCallScreen.css'
 
 function VideoCallScreen({ myVideo, remoteVideo, micOn, videoOn, toggleMic, toggleVideo, EndCall, selectedName }) {
   return (

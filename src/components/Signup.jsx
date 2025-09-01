@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import { FaUser, FaEnvelope, FaLock } from "react-icons/fa"; // 👈 Icons import
 
 function Signup() {
   const [formData, setFormData] = useState({
@@ -29,13 +30,16 @@ function Signup() {
       setLoading(false);
       return;
     }
-   console.log(formData.name,'formdata')
+
     try {
-      const response = await axios.post(`${import.meta.env.VITE_DEV_URL}/api/users/signup`, {
-        name: formData.name,
-        email: formData.email.trim(),
-        password: formData.password.trim(),
-      });
+      const response = await axios.post(
+        `${import.meta.env.VITE_DEV_URL}/api/users/signup`,
+        {
+          name: formData.name,
+          email: formData.email.trim(),
+          password: formData.password.trim(),
+        }
+      );
 
       if (response.status === 201) {
         setSuccess("✅ Account created successfully! Please login.");
@@ -43,6 +47,7 @@ function Signup() {
           name: "",
           email: "",
           password: "",
+          confirmPassword: "",
         });
       }
     } catch (err) {
@@ -57,62 +62,68 @@ function Signup() {
     <div className="hero bgg min-h-screen p-5">
       <div className="card bglogin w-full max-w-sm shrink-0 shadow-2xl">
         <form className="card-body" onSubmit={handleSignup}>
-          <fieldset className="fieldset">
-            <label className="label">
-              <span className="label-text text-white">Full Name</span>
-            </label>
-            <input
-              type="text"
-              name="name"
-              className="gradient-input w-full"
-              placeholder="Enter your full name"
-              value={formData.name}
-              onChange={handleChange}
-              required
-            />
+          <fieldset className="fieldset space-y-3">
+            {/* Name */}
+            <div className="relative">
+              <FaUser className="absolute left-3 top-4 text-gray-400 iconsss" />
+              <input
+                type="text"
+                name="name"
+                className="gradient-input w-full pl-10"
+                placeholder="Enter your full name"
+                value={formData.name}
+                onChange={handleChange}
+                required
+              />
+            </div>
 
-            <label className="label mt-3">
-              <span className="label-text text-white">Gmail ID</span>
-            </label>
-            <input
-              type="email"
-              name="email"
-              className="gradient-input w-full"
-              placeholder="example@gmail.com"
-              value={formData.email}
-              onChange={handleChange}
-              required
-            />
+            {/* Email */}
+            <div className="relative">
+              <FaEnvelope className="absolute left-4 top-3 text-gray-400 iconsss" />
+              <input
+                type="email"
+                name="email"
+                className="gradient-input w-full pl-10"
+                placeholder="example@gmail.com"
+                value={formData.email}
+                onChange={handleChange}
+                required
+              />
+            </div>
 
-            <label className="label mt-3">
-              <span className="label-text text-white">Password</span>
-            </label>
-            <input
-              type="password"
-              name="password"
-              className="gradient-input w-full"
-              placeholder="Password"
-              value={formData.password}
-              onChange={handleChange}
-              required
-            />
+            {/* Password */}
+            <div className="relative">
+              <FaLock className="absolute left-3 top-4 text-gray-400 iconsss" />
+              <input
+                type="password"
+                name="password"
+                className="gradient-input w-full pl-10"
+                placeholder="Password"
+                value={formData.password}
+                onChange={handleChange}
+                required
+              />
+            </div>
 
-            <label className="label mt-3">
-              <span className="label-text text-white">Confirm Password</span>
-            </label>
-            <input
-              type="password"
-              name="confirmPassword"
-              className="gradient-input w-full"
-              placeholder="Confirm Password"
-              value={formData.confirmPassword}
-              onChange={handleChange}
-              required
-            />
+            {/* Confirm Password */}
+            <div className="relative">
+              <FaLock className="absolute left-3 top-4 text-gray-400 iconsss" />
+              <input
+                type="password"
+                name="confirmPassword"
+                className="gradient-input w-full pl-10"
+                placeholder="Confirm Password"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                required
+              />
+            </div>
 
+            {/* Error / Success */}
             {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
             {success && <p className="text-green-500 text-sm mt-2">{success}</p>}
 
+            {/* Submit button */}
             <button
               className="animated-gradient-btn mt-4"
               type="submit"
@@ -125,6 +136,7 @@ function Signup() {
               )}
             </button>
 
+            {/* Already have account */}
             <div className="text-center mt-3">
               <Link to="/" className="link link-hover text-sm gradient-link">
                 Already have an account? Login
