@@ -3,27 +3,36 @@ import { FiPhone, FiVideo, FiMic, FiMoreHorizontal } from "react-icons/fi";
 import { IoIosArrowBack } from "react-icons/io";
 import AOS from "aos";
 import "aos/dist/aos.css";
-import '../css/Avatar.css'
+import "../css/Avatar.css";
 
-function ChatHeader({ selectedUser, onBack, onCallVideo, showActions, onCallAudio, setShowActions }) {
+function ChatHeader({
+  selectedUser,
+  onBack,
+  onCallVideo,
+  showActions,
+  onCallAudio,
+  setShowActions,
+}) {
+  const socket = useRef(null);
+
   useEffect(() => {
     AOS.init({ duration: 800, once: true });
     AOS.refresh();
   }, []);
 
-  const socket = useRef(null);
-
   return (
     <div
       className="flex items-center justify-between gap-3 p-3 md:p-4 border-b bg-base-100 shadow-sm flex-wrap"
-      data-aos="fade-right"
+      data-aos="fade-down" // 👈 animation applied
     >
+      {/* Left side (Back + Avatar + Name) */}
       <div className="flex items-center gap-3 min-w-[50%]">
         <button className="cursor-pointer md:btn-sm" onClick={onBack}>
-          <IoIosArrowBack />
+          <IoIosArrowBack size={22} />
         </button>
+
         <div className="avatar">
-          {selectedUser.profilePic ? (
+          {selectedUser?.profilePic ? (
             <img
               src={selectedUser.profilePic}
               alt={selectedUser.name}
@@ -31,27 +40,28 @@ function ChatHeader({ selectedUser, onBack, onCallVideo, showActions, onCallAudi
             />
           ) : (
             <div className="avatar-initial">
-              {selectedUser.name?.charAt(0).toUpperCase()}
+              {selectedUser?.name?.charAt(0).toUpperCase()}
             </div>
           )}
         </div>
 
         <div className="flex flex-col">
           <h2 className="text-sm md:text-lg font-semibold truncate">
-            {selectedUser.name}
+            {selectedUser?.name}
           </h2>
           <p className="text-xs md:text-sm text-gray-500">
-            Last seen: {selectedUser.online ? "Online now" : "2 minutes ago"}
+            Last seen: {selectedUser?.online ? "Online now" : "2 minutes ago"}
           </p>
         </div>
       </div>
 
+      {/* Right side (buttons) */}
       <div className="flex items-center gap-2 text-lg text-gray-600">
+        {/* Desktop buttons */}
         <div className="hidden sm:flex items-center gap-2">
           <button className="btn btn-ghost btn-xs md:btn-sm" onClick={onCallAudio}>
             <FiPhone />
           </button>
-
           <button className="btn btn-ghost btn-xs md:btn-sm" onClick={onCallVideo}>
             <FiVideo />
           </button>
@@ -60,23 +70,45 @@ function ChatHeader({ selectedUser, onBack, onCallVideo, showActions, onCallAudi
           </button>
         </div>
 
-        {/* Mobile menu */}
+        {/* Mobile dropdown */}
         <div className="sm:hidden relative">
           <button
             className="btn btn-ghost btn-xs"
-            onClick={() => setShowActions(!showActions)}
+            onClick={() => setShowActions((prev) => !prev)}
           >
-            <FiMoreHorizontal />
+            <FiMoreHorizontal size={20} />
           </button>
+
           {showActions && (
-            <div className="absolute left-0 top-full mt-1 flex bg-white shadow-lg rounded-lg p-1 gap-1 z-10" data-aos="fade-left">
-              <button className="btn btn-ghost btn-xs md:btn-sm" onClick={onCallAudio}>
+            <div
+              className="absolute right-0 top-full mt-1 flex bg-white shadow-lg rounded-lg p-1 gap-1 z-20"
+              data-aos="fade-left" // 👈 dropdown animation
+            >
+              <button
+                className="btn btn-ghost btn-xs"
+                onClick={() => {
+                  onCallAudio();
+                  setShowActions(false);
+                }}
+              >
                 <FiPhone />
               </button>
-              <button className="btn btn-ghost btn-xs" onClick={onCallVideo}>
+              <button
+                className="btn btn-ghost btn-xs"
+                onClick={() => {
+                  onCallVideo();
+                  setShowActions(false);
+                }}
+              >
                 <FiVideo />
               </button>
-              <button className="btn btn-ghost btn-xs">
+              <button
+                className="btn btn-ghost btn-xs"
+                onClick={() => {
+                  // Mic ka logic
+                  setShowActions(false);
+                }}
+              >
                 <FiMic />
               </button>
             </div>

@@ -379,6 +379,7 @@ useEffect(() => {
           constraints
         );
         setStream(mediaStream);
+        if (myVideo.current) myVideo.current.srcObject = mediaStream; 
 
         pcRef.current = createPeerConnection(from);
         mediaStream.getTracks().forEach((t) =>
@@ -601,20 +602,16 @@ useEffect(() => {
             </>
           )
         ) : (
-          <main className="container">
-            <p>Hello 👋 I'm</p>
-            <section className="animation">
-              <div className="first">
-                <div>ZAFAR AHMAD</div>
-              </div>
-              <div className="second">
-                <div>Web Developer</div>
-              </div>
-              <div className="third">
-                <div>Software Engineer</div>
-              </div>
-            </section>
-          </main>
+         <main class="intro-container">
+  <p class="intro-hello">Hello 👋 I'm</p>
+
+  <h1 class="fire-wrapper">
+    <span class="fire-text">ZAFAR AHMAD</span>
+  </h1>
+
+  <p class="fire-subtext">Web Developer | Software Engineer</p>
+</main>
+
         )}
       </div>
 

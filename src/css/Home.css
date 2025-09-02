@@ -168,10 +168,100 @@ body {
   background-position: 100% 0;
 }
 
+
 /* --- Misc Responsiveness --- */
 @media (max-width: 1024px) {
-  .h-screen { height: 90vh; }
+  .h-screen { height: 90vh; 
+    .w-full {
+    width: 26.625rem;
+}
+    
+  }
 }
 .iconsss{
   font-size: 1.1rem;
+}
+.absolute.left-0.top-full.mt-1.flex.bg-white.shadow-lg.rounded-lg.p-1.gap-1.z-10 {
+    display: block;
+}
+
+.intro-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  text-align: center;
+  background: #0a0a0a;
+  color: white;
+  font-family: "Poppins", sans-serif;
+}
+
+/* Hello text */
+.intro-hello {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+  color: #ffcc70;
+  animation: fadeIn 2s ease-in-out;
+}
+
+/* Fire text main name */
+.fire-text {
+  font-size: 3.5rem;
+  font-weight: 900;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  background: linear-gradient(
+    45deg,
+    #ff4d00,
+    #ff8800,
+    #ffaa00,
+    #ff6600,
+    #ff2200
+  );
+  background-size: 300% 300%;
+  -webkit-background-clip: text;
+  color: transparent;
+  animation: fireGlow 3s infinite, gradientShift 5s linear infinite;
+  text-shadow: 0 0 20px rgba(255, 100, 0, 0.8), 
+               0 0 40px rgba(255, 150, 0, 0.6),
+               0 0 60px rgba(255, 200, 0, 0.4);
+}
+
+/* Subtext below name */
+.fire-subtext {
+  font-size: 1.5rem;
+  margin-top: 10px;
+  color: #eee;
+  animation: fadeUp 2s ease-in-out;
+}
+
+/* Animations */
+@keyframes fireGlow {
+  0%, 100% {
+    text-shadow: 0 0 20px rgba(255, 80, 0, 0.9),
+                 0 0 40px rgba(255, 140, 0, 0.7),
+                 0 0 60px rgba(255, 200, 0, 0.5);
+  }
+  50% {
+    text-shadow: 0 0 30px rgba(255, 160, 0, 1),
+                 0 0 60px rgba(255, 200, 0, 0.8),
+                 0 0 90px rgba(255, 100, 0, 0.6);
+  }
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }

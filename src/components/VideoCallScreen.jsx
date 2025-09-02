@@ -17,7 +17,7 @@ function VideoCallScreen({ myVideo, remoteVideo, micOn, videoOn, toggleMic, togg
 
       <div className="vc-stage">
         <div className="vc-video-box">
-          <video ref={myVideo} autoPlay muted playsInline className="vc-video" />
+          <video ref={myVideo} autoPlay  playsInline className="vc-video" />
           <span className="vc-badge">You</span>
         </div>
         <div className="vc-video-box">
