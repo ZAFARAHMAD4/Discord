@@ -1,8 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import { FiPhone, FiVideo, FiMic, FiMoreHorizontal } from "react-icons/fi";
 import { IoIosArrowBack } from "react-icons/io";
-import AOS from "aos";
-import "aos/dist/aos.css";
+
 import "../css/Avatar.css";
 
 function ChatHeader({
@@ -15,15 +14,12 @@ function ChatHeader({
 }) {
   const socket = useRef(null);
 
-  useEffect(() => {
-    AOS.init({ duration: 800, once: true });
-    AOS.refresh();
-  }, []);
+
 
   return (
+    
     <div
       className="flex items-center justify-between gap-3 p-3 md:p-4 border-b bg-base-100 shadow-sm flex-wrap"
-      data-aos="fade-down" // 👈 animation applied
     >
       {/* Left side (Back + Avatar + Name) */}
       <div className="flex items-center gap-3 min-w-[50%]">
@@ -82,7 +78,6 @@ function ChatHeader({
           {showActions && (
             <div
               className="absolute right-0 top-full mt-1 flex bg-white shadow-lg rounded-lg p-1 gap-1 z-20"
-              data-aos="fade-left" // 👈 dropdown animation
             >
               <button
                 className="btn btn-ghost btn-xs"

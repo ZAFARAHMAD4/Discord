@@ -117,25 +117,25 @@ function Sidebar({ users, selectedUser, setSelectedUser, currentUser }) {
             <h2 className="text-xl font-bold mb-4">Edit Profile</h2>
 
             {/* Example Form */}
-            <form className="flex flex-col gap-3">
+            <form className="flex flex-col gap-3 w-100">
               <input
                 type="text"
                 placeholder="Name"
                 defaultValue={currentUser.name}
-                className="input input-bordered w-full"
+                className="input input-bordered w-70"
               />
               <input
                 type="email"
                 placeholder="Email"
                 defaultValue={currentUser.email}
-                className="input input-bordered w-full"
+                className="input input-bordered w-70"
               />
-              <button className="btn btn-primary w-full mt-3">
+              <button className="btn btn-primary w-70 mt-3">
                 Save Changes  <IoIosSave />
               </button>
               <button
                 type="button"
-                className="btn btn-primary w-full mt-3"
+                className="btn btn-primary w-70 mt-3"
                 onClick={() => {
                   localStorage.removeItem("currentUser"); // storage se user hatao
                   navigate("/"); // login page pe bhejo
