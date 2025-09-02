@@ -11,10 +11,11 @@ import RingingBanner from "../components/RingingBanner";
 import "../css/Home.css";
 import AOS from "aos";
 import "aos/dist/aos.css";
+import axios from "axios";
 function Home() {
   useEffect(() => {
-  AOS.init({ duration: 800 });
-}, []);
+    AOS.init({ duration: 800 });
+  }, []);
   const socket = useRef(null);
 
   // ---------- UI states ----------
@@ -31,34 +32,34 @@ function Home() {
   const currentUsers = localStorage.getItem("currentUser");
   const currentUser = currentUsers
     ? {
-        name: JSON.parse(currentUsers).name,
-        email: JSON.parse(currentUsers).email,
-        profilePic: "https://i.pravatar.cc/40?img=2",
-      }
+      name: JSON.parse(currentUsers).name,
+      email: JSON.parse(currentUsers).email,
+      profilePic: "https://i.pravatar.cc/40?img=2",
+    }
     : { name: "Anonymous", email: "unknown@example.com" };
 
   // ---------- fetch users ----------
-useEffect(() => {
-  const fetchUsers = async () => {
-    try {
-      const response = await fetch(`${import.meta.env.VITE_DEV_URL}/api/users`); // ✅ correct API
-      const data = await response.json();
-      console.log(data, "selectedUser");
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const response = await fetch(`${import.meta.env.VITE_DEV_URL}/api/users`); // ✅ correct API
+        const data = await response.json();
+        console.log(data, "selectedUser");
 
-      if (response.ok) {
-        // ✅ backend ka response ka structure check karo
-        const allUsers = data.users || [];
-        const filteredUsers = allUsers.filter(
-          (user) => user.email !== currentUser.email
-        );
-        setUsers(filteredUsers);
+        if (response.ok) {
+          // ✅ backend ka response ka structure check karo
+          const allUsers = data.users || [];
+          const filteredUsers = allUsers.filter(
+            (user) => user.email !== currentUser.email
+          );
+          setUsers(filteredUsers);
+        }
+      } catch (err) {
+        console.error("Error fetching users:", err);
       }
-    } catch (err) {
-      console.error("Error fetching users:", err);
-    }
-  };
-  fetchUsers();
-}, []);
+    };
+    fetchUsers();
+  }, []);
 
 
   // ---------- resize ----------
@@ -182,7 +183,7 @@ useEffect(() => {
           from: currentUser.email,
         });
       }
-    } catch {}
+    } catch { }
     cleanupCall();
   };
 
@@ -314,6 +315,7 @@ useEffect(() => {
 
   // ---------- chat send ----------
   const handleSend = () => {
+    console.log('object')
     if (!message.trim() || !selectedUser) return;
     const newMessage = {
       from: currentUser.email,
@@ -326,12 +328,13 @@ useEffect(() => {
       }),
     };
     socket.current.emit("send_private_message", newMessage);
-    setMessages((prev) => [...prev, newMessage]);
+    // setMessages((prev) => [...prev, newMessage]);
     setMessage("");
   };
 
   // ---------- file send ----------
   const handleFileSend = (file) => {
+    console.log('object')
     const reader = new FileReader();
     reader.onloadend = () => {
       const fileData = {
@@ -351,7 +354,7 @@ useEffect(() => {
         }),
       };
       socket.current.emit("send_private_message", newMessage);
-      setMessages((prev) => [...prev, newMessage]);
+      // setMessages((prev) => [...prev, newMessage]);
     };
     reader.readAsDataURL(file);
   };
@@ -379,7 +382,7 @@ useEffect(() => {
           constraints
         );
         setStream(mediaStream);
-        if (myVideo.current) myVideo.current.srcObject = mediaStream; 
+        if (myVideo.current) myVideo.current.srcObject = mediaStream;
 
         pcRef.current = createPeerConnection(from);
         mediaStream.getTracks().forEach((t) =>
@@ -530,17 +533,39 @@ useEffect(() => {
     setCallerEmail(null);
     setCallType(null);
   };
-  console.log(users,'usershome')
-  console.log(selectedUser,'selectedUserhome')
+  // console.log(users, 'usershome')
+  // console.log(selectedUser, 'selectedUserhome')
+
+  const [allMessage, setAllMessage] = useState([])
+
+useEffect(() => {
+  console.log(11111);
+
+  const fetchData = async () => {
+    console.log(22222);
+    try {
+      const response = await axios.post("http://localhost:4000/fetchAllMessages", {
+        email: currentUser.email,
+      });
+      console.log("data123", response.data.messages);
+      setAllMessage(response.data.messages)
+
+      
+    } catch (error) {
+      console.error("Error fetching messages:", error);
+    }
+  };
+
+  fetchData(); // call it here, outside the function
+}, [currentUser.email]); // add dependency if currentUser can change
 
   // ---------- Render ----------
   return (
     <div className="flex w-full h-screen bgg">
       {/* Left Sidebar */}
       <div
-        className={`${
-          selectedUser && window.innerWidth < 768 ? "hidden" : "block"
-        } w-full md:w-1/4 lg:w-1/5 bg-base-200 border-r custom-sidebar`}
+        className={`${selectedUser && window.innerWidth < 768 ? "hidden" : "block"
+          } w-full md:w-1/4 lg:w-1/5 bg-base-200 border-r custom-sidebar`}
         style={{ height: sidebarHeight }}
       >
         <Sidebar
@@ -587,10 +612,9 @@ useEffect(() => {
                 onCallAudio={CallAudio}   // ✅ audio call button
                 showActions={showActions}
                 setShowActions={setShowActions}
-                
-              />
 
-              <MessageList messages={messages} currentUser={currentUser} />
+              />
+              <MessageList messages={messages} allMessage={allMessage} currentUser={currentUser} selectedUser={selectedUser} />
 
               <MessageInput
                 message={message}
@@ -602,21 +626,21 @@ useEffect(() => {
             </>
           )
         ) : (
-         <main class="intro-container">
-  <p class="intro-hello">Hello 👋 I'm</p>
+          <main class="intro-container">
+            <p class="intro-hello">Hello 👋 I'm</p>
 
-  <h1 class="fire-wrapper">
-    <span class="fire-text">ZAFAR AHMAD</span>
-  </h1>
+            <h1 class="fire-wrapper">
+              <span class="fire-text">ZAFAR AHMAD</span>
+            </h1>
 
-  <p class="fire-subtext">Web Developer | Software Engineer</p>
-</main>
+            <p class="fire-subtext">Web Developer | Software Engineer</p>
+          </main>
 
         )}
       </div>
 
       {/* Caller ringing banner */}
-      {ringing && <RingingBanner   user={selectedUser} onEnd={EndCall}/>}
+      {ringing && <RingingBanner user={selectedUser} onEnd={EndCall} />}
 
       {/* Incoming Call Popup */}
       {incomingCall && (

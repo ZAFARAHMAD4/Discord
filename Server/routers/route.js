@@ -1,7 +1,7 @@
-const express=require("express")
-const router=express.Router()
-const User=require("../model/User")
-
+const express = require("express")
+const router = express.Router()
+const User = require("../model/User")
+const Message = require("../model/Message");
 
 // Discord 
 
@@ -117,5 +117,41 @@ router.post("/forgot-password", async (req, res) => {
   }
 });
 
+// Create a new message
+router.post("/messages", async (req, res) => {
+  try {
+    const { chatId, sender, message, file } = req.body;
 
-module.exports=router 
+    if (!chatId || !sender) {
+      return res.status(400).json({ error: "chatId and sender are required" });
+    }
+
+    const newMessage = new Message({
+      chatId,
+      sender,
+      message: message || "",
+      file: file || { name: "", type: "", content: "" },
+    });
+
+    const savedMessage = await newMessage.save();
+
+    res.status(201).json(savedMessage); // ✅ message is saved in DB
+  } catch (err) {
+    console.error("Error saving message:", err);
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
+// Get all messages for a chat
+router.get("/messages/:chatId", async (req, res) => {
+  try {
+    const { chatId } = req.params;
+    const messages = await Message.find({ chatId }).sort({ timestamp: 1 });
+    res.json(messages);
+  } catch (err) {
+    console.error("Error fetching messages:", err);
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
+module.exports = router 

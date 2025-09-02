@@ -4,7 +4,7 @@ const bodyParser = require("body-parser");
 const http = require("http");
 const { Server } = require("socket.io");
 const cors = require("cors");
-
+const Message = require("./model/Message"); // index.js ke top me import
 // Database aur routes import kiye
 const connectedDB = require("./config/db");
 const users = require("./routers/route");
@@ -34,42 +34,55 @@ io.on("connection", (socket) => {
     io.emit("user_online", userId);
   });
 
-  // Private message bhejna
-  socket.on("send_private_message", ({ to, from, message, file }) => {
+// Private message bhejna
+socket.on("send_private_message", async ({ to, from, message, file }) => {
+  console.log("Incoming private message:", to, from, message);
+
+
+  // ✅ Save message in DB
+  const newMsg = new Message({ chatId:to, sender: from, message, file });
+  await newMsg.save();
+
+  // Emit to recipient (if online) and include all needed fields
+  const payload = {
+    from,
+    to,
+    message,
+    file: file || null,
+    time: new Date().toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true,
+    }),
+  };
+
+  const targetSocketId = usersMap.get(to);
+  if (targetSocketId) {
+    io.to(targetSocketId).emit("receive_private_message", payload);
+  }
+
+  // ✅ Optional: also emit back to sender so they get confirmed message
+  socket.emit("receive_private_message", payload);
+});
+
+
+  // 📞 Video call events
+  // call_user
+  socket.on("call_user", ({ to, from, name, type }) => {
     const targetSocketId = usersMap.get(to);
     if (targetSocketId) {
-      io.to(targetSocketId).emit("receive_private_message", {
-        from,
-        message,
-        file: file || null,
-        time: new Date().toLocaleTimeString([], {
-          hour: "2-digit",
-          minute: "2-digit",
-          hour12: true,
-        }),
-      });
-    } else {
-      console.log(`User ${to} not connected`);
+      console.log(`Incoming ${type || "video"} call from ${from} -> ${to}`);
+      io.to(targetSocketId).emit("incoming_call", { from, name, type });
     }
   });
 
-  // 📞 Video call events
-// call_user
-socket.on("call_user", ({ to, from, name, type }) => {
-  const targetSocketId = usersMap.get(to);
-  if (targetSocketId) {
-    console.log(`Incoming ${type || "video"} call from ${from} -> ${to}`);
-    io.to(targetSocketId).emit("incoming_call", { from, name, type });
-  }
-});
-
-// accept_call
-socket.on("accept_call", ({ to, from, type }) => {
-  const targetSocketId = usersMap.get(to);
-  if (targetSocketId) {
-    io.to(targetSocketId).emit("call_accepted", { from, type });
-  }
-});
+  // accept_call
+  socket.on("accept_call", ({ to, from, type }) => {
+    const targetSocketId = usersMap.get(to);
+    if (targetSocketId) {
+      io.to(targetSocketId).emit("call_accepted", { from, type });
+    }
+  });
 
 
 
@@ -146,6 +159,27 @@ app.get("/", (req, res) => {
   res.send("hello");
 });
 
+
+// API route to fetch all messages for a user
+app.post("/fetchAllMessages", async (req, res) => {
+  const { email } = req.body; // payload: { email: "user@example.com" }
+
+  if (!email) return res.status(400).json({ error: "Email is required" });
+
+  try {
+    const messages = await Message.find({
+      $or: [
+        { sender: email },
+        { chatId: { $regex: email } }, // chatId contains this email
+      ],
+    }).sort({ timestamp: 1 });
+
+    res.json({ messages });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Server error" });
+  }
+});
 // Server start
 const port = 4000;
 server.listen(port, () => {
