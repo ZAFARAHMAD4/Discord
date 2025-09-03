@@ -535,29 +535,29 @@ function Home() {
   };
   // console.log(users, 'usershome')
   // console.log(selectedUser, 'selectedUserhome')
-const [allMessage, setAllMessage] = useState([]);
+
+  const [allMessage, setAllMessage] = useState([])
 
 useEffect(() => {
+  console.log(11111);
+
   const fetchData = async () => {
+    console.log(22222);
     try {
-      const response = await axios.post(
-        `${import.meta.env.VITE_DEV_URL}/fetchAllMessages`,
-        { email: currentUser.email }
-      );
-      setAllMessage(response.data.messages);
+      const response = await axios.post(`${import.meta.env.VITE_DEV_URL}/fetchAllMessages`, {
+        email: currentUser.email,
+      });
+      console.log("data123", response.data.messages);
+      setAllMessage(response.data.messages)
+
+      
     } catch (error) {
       console.error("Error fetching messages:", error);
     }
   };
 
-  fetchData(); // run immediately once
-
-  // run every 3 seconds
-  const interval = setInterval(fetchData, 3000);
-
-  return () => clearInterval(interval); // cleanup
-}, [currentUser.email]);
-
+  fetchData(); // call it here, outside the function
+}, [currentUser.email]); // add dependency if currentUser can change
 
   // ---------- Render ----------
   return (
