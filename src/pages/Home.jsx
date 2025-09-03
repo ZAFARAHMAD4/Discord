@@ -544,7 +544,7 @@ useEffect(() => {
   const fetchData = async () => {
     console.log(22222);
     try {
-      const response = await axios.post("http://localhost:4000/fetchAllMessages", {
+      const response = await axios.post(`${import.meta.env.VITE_DEV_URL}/fetchAllMessages`, {
         email: currentUser.email,
       });
       console.log("data123", response.data.messages);
