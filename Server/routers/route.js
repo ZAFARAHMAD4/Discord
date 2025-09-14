@@ -7,7 +7,7 @@ const Message = require("../model/Message");
 
 router.post("/signup", async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const { name, email, password ,} = req.body;
 
     console.log("📩 Incoming body:", req.body); // 👈 Debug step
 

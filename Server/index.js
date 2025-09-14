@@ -123,7 +123,7 @@ socket.on("send_private_message", async ({ to, from, message, file }) => {
   });
 
   // Disconnect
-  socket.on("disconnect", () => {
+  socket.on("disconnect",async  () => {
     console.log("User disconnected:", socket.id);
     let disconnectedUser = null;
     for (let [key, value] of usersMap.entries()) {
@@ -134,7 +134,15 @@ socket.on("send_private_message", async ({ to, from, message, file }) => {
       }
     }
     if (disconnectedUser) {
-      io.emit("user_offline", disconnectedUser);
+          await users.findOneAndUpdate(
+      { email: disconnectedUser },
+      { status: "offline", lastSeen: new Date() }
+    )
+      
+          io.emit("user_offline", {
+      email: disconnectedUser,
+      lastSeen: new Date()
+    });
     }
   });
 

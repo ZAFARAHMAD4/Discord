@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import { FiPhone, FiVideo, FiMic, FiMoreHorizontal } from "react-icons/fi";
 import { IoIosArrowBack } from "react-icons/io";
-
+import { formatDistanceToNow } from "date-fns";
 import "../css/Avatar.css";
 
 function ChatHeader({
@@ -17,7 +17,7 @@ function ChatHeader({
 
 
   return (
-    
+
     <div
       className="flex items-center justify-between gap-3 p-3 md:p-4 border-b bg-base-100 shadow-sm flex-wrap"
     >
@@ -46,7 +46,11 @@ function ChatHeader({
             {selectedUser?.name}
           </h2>
           <p className="text-xs md:text-sm text-gray-500">
-            Last seen: {selectedUser?.online ? "Online now" : "2 minutes ago"}
+            {selectedUser?.online
+              ? "Online now"
+              : selectedUser?.lastSeen
+                ? `Last seen ${formatDistanceToNow(new Date(selectedUser.lastSeen), { addSuffix: true })}`
+                : "Last seen: unknown"}
           </p>
         </div>
       </div>
